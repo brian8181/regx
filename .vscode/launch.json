@@ -9,7 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${fileDirname}/${fileBasenameNoExtension}",
-            "args": [],
+            "args": ["(\\(\\d\\d\\d\\)|(\\d\\d\\d-))\\d\\d\\d-\\d\\d\\d\\d", "214-555-5555 (972)285-6127"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],

@@ -1,36 +1,38 @@
 # match tag aka. <SOME_TEXT> 
-./regx "\\<([A-z]+[A-z0-9]*)\\>" "<tag1>abc<tag2>xxx<artist>:<title>-<track>.mp3" 
-./regx "\\<([A-z]+[A-z0-9]*)\\>abc" "<tag1>abc<tag2>"
-./regx "a.{2}\>" "<tag1>abc<tag2>"
+./src/regx "\\<([A-z]+[A-z0-9]*)\\>" "<tag1>abc<tag2>xxx<artist>:<title>-<track>.mp3" 
+./src/regx "\\<([A-z]+[A-z0-9]*)\\>abc" "<tag1>abc<tag2>"
+./src/regx "a.{2}\>" "<tag1>abc<tag2>"
 
 # match all 'a's
-./regx a abcabcabcaabbcc
+./src/regx a abcabcabcaabbcc
 
 # match phone 
-./regx "\d\d\d-\d\d\d-\d\d\d\d" "Bob: 214-555-5555 Alice: 972-555-6666"
+./src/regx "\d\d\d-\d\d\d-\d\d\d\d" "Bob: 214-555-5555 Alice: 972-555-6666"
 
 # no matches here
-./regx "^\d\d\d-\d\d\d-\d\d\d\d$" "Bob: 214-555-5555 Alice: 972-555-6666"
+./src/regx "^\d\d\d-\d\d\d-\d\d\d\d$" "Bob: 214-555-5555 Alice: 972-555-6666"
 
 # match phone @ beginning and ending of line
-./regx "^\d\d\d-\d\d\d-\d\d\d\d$" "214-555-5555"
+./src/regx "^\d\d\d-\d\d\d-\d\d\d\d$" "214-555-5555"
+# match phone @ beginning and ending of line
+./src/regx "(\(\d\d\d\)|(\d\d\d-))\d\d\d-\d\d\d\d" "214-555-5555 (972)285-6127"
 
 
 # BUG: problem with newline
-#todo ./regx "^\d\d\d-\d\d\d-\d\d\d\d$" "\\n214-555-5555\\n972-555-6666\\n"
+#todo ./src/regx "^\d\d\d-\d\d\d-\d\d\d\d$" "\\n214-555-5555\\n972-555-6666\\n"
 
-./regx "[[:space:]]" "abc abc	abc a b c"
-./regx "\s" "abc abc   abc a b c"
+./src/regx "[[:space:]]" "abc abc	abc a b c"
+./src/regx "\s" "abc abc   abc a b c"
 
-./regx "[^[:space:]]" "abc abc   abc a b c" 
-./regx "\S" "abc abc   abc a b c"
+./src/regx "[^[:space:]]" "abc abc   abc a b c" 
+./src/regx "\S" "abc abc   abc a b c"
 
 # escaping bashslahes
-./regx "\\\\abc\\\\bca\\\\" "\\abc\\bca\\"
-./regx "\\\\abc\\\\" "\\abc\\"
+./src/regx "\\\\abc\\\\bca\\\\" "\\abc\\bca\\"
+./src/regx "\\\\abc\\\\" "\\abc\\"
 
 # find quoted text ...
-./regx "\"\w*\"" "\"hello\" \"world\" any\"thing\""
-./regx "\"\w*\"" "\"aaa\"bbb\"ccc\""
+./src/regx "\"\w*\"" "\"hello\" \"world\" any\"thing\""
+./src/regx "\"\w*\"" "\"aaa\"bbb\"ccc\""
 # error
-./regx \"\w*\"  \"aaa\"bbb\"
+./src/regx \"\w*\"  \"aaa\"bbb\"

@@ -28,20 +28,21 @@ int main(int argc, char* argv[])
     string bash_str = src;
     for (std::sregex_iterator i = begin; i != end; ++i)
     {
-        std::string begin_color_green = "\e[32m";
-        std::string end_color = "\e[0m";
-
+        std::string FG_GREEN = "\e[32m";
+        std::string RESET_FORMAT = "\e[0m";
+        std::string UNDERLINE = "\e[4m";
+       
         smatch match = *i;
                 
-        int pos = match.position() + (idx * (begin_color_green.length() + end_color.length()));
+        int pos = match.position() + (idx * (FG_GREEN.length() + RESET_FORMAT.length()));
         int len = match.length();
 
         // set bash green start postion
-        bash_str.insert(pos, begin_color_green);
+        bash_str.insert(pos, FG_GREEN);
 
         // reset bash color position
-        pos = pos + begin_color_green.length() + len;
-        bash_str.insert(pos, end_color);
+        pos = pos + FG_GREEN.length() + len;
+        bash_str.insert(pos, RESET_FORMAT);
        
         ++idx;
     }
