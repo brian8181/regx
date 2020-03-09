@@ -33,6 +33,4 @@
 ./regx "\"\w*\"" "\"hello\" \"world\" any\"thing\""
 ./regx "\"\w*\"" "\"aaa\"bbb\"ccc\""
 # error
-./regx \"\w*\"  \"aaa\"bbb\"ccc\"
-
-
+./regx \"\w*\"  \"aaa\"bbb\"
