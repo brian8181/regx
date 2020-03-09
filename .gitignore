@@ -1,1 +1,4 @@
 regx
+regx.d
+obj/regx.o
+myapp

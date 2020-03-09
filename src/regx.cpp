@@ -12,7 +12,7 @@ int main(int argc, char* argv[])
     string exp(argv[1]);
     string src(argv[2]);
 
-    cout << "\nregx [OPTIONS] PATTERN [FILE...]\n";
+    cout << "regx [OPTIONS] PATTERN [FILE...]\n";
     cout << "pattern: " << "\"" << exp << "\"" << " -> " 
             << "input: " << "\"" << src << "\"" << endl;
 
