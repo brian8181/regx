@@ -36,3 +36,6 @@
 ./src/regx "\"\w*\"" "\"aaa\"bbb\"ccc\""
 # error
 ./src/regx \"\w*\"  \"aaa\"bbb\"
+
+./regx "a\\\\z" "a\\z"
+./regx $(echo "a\\\\z") "a\\z"
