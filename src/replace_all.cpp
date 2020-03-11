@@ -4,7 +4,7 @@
 
 using namespace std;
 
-void replace_string(string& s, const string& find_str, const string& replace_str);
+void replace_all(string& s, const string& find_str, const string& replace_str);
 
 int main(int argc, char* argv[]) 
 {
@@ -15,12 +15,12 @@ int main(int argc, char* argv[])
     string find_str(argv[2]);
     string replace_str(argv[3]);
 
-    replace_string(src, find_str, replace_str);
+    replace_all(src, find_str, replace_str);
 
     cout << src << endl;
 }
 
-void replace_string(string& s, const string& find_str, const string& replace_str)
+void replace_all(string& s, const string& find_str, const string& replace_str)
 {
     size_t pos = 0;
     size_t len = s.length();

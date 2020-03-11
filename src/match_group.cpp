@@ -64,8 +64,8 @@ int main(int argc, char* argv[])
     cout << bash_str << "\n";
 }
 
-string EscapeRegxChars(const string& s)
-{
-    size_t pos = bash_str.find(".");
-    bash_str.replace(pos, 1, "\\.");
-}
+// string EscapeRegxChars(const string& s)
+// {
+//     size_t pos = bash_str.find(".");
+//     bash_str.replace(pos, 1, "\\.");
+// }
