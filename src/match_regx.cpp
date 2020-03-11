@@ -26,9 +26,10 @@ int main(int argc, char* argv[])
 
     int idx = 0;
     string bash_str = src;
-    
+    string reg_exp;
+
     for (std::sregex_iterator i = begin; i != end; ++i)
-    {
+    { 
         std::string FG_GREEN = "\e[32m";
         std::string UNDERLINE = "\e[4m";
         std::string RESET_FORMAT = "\e[0m";
@@ -37,17 +38,24 @@ int main(int argc, char* argv[])
         smatch match = *i;
 
         std::cout << match.str() << std::endl;
-                
-        int pos = match.position() + (idx * (CURRENT_FG_COLOR.length() + RESET_FORMAT.length()));
-        int len = match.length();
-        // set bash green start postion
-        bash_str.insert(pos, CURRENT_FG_COLOR);
 
-        // reset bash color position
-        pos = pos + CURRENT_FG_COLOR.length() + len;
-        bash_str.insert(pos, RESET_FORMAT);
+        size_t pos = bash_str.find(".");
+        bash_str.replace(pos, 1, "\\.");
+        bash_str.replace(match.position(), match.length(), "(.*)");
+        
+        break;
+
+
+        // int pos = match.position() + (idx * (CURRENT_FG_COLOR.length() + RESET_FORMAT.length()));
+        // int len = match.length();
+        // // set bash green start postion
+        // bash_str.insert(pos, CURRENT_FG_COLOR);
+
+        // // reset bash color position
+        // pos = pos + CURRENT_FG_COLOR.length() + len;
+        // bash_str.insert(pos, RESET_FORMAT);
        
-        ++idx;
+        //++idx;
     }
 
     cout << bash_str << "\n";

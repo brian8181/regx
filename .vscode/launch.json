@@ -24,6 +24,28 @@
             ],
             "preLaunchTask": "g++ build active file",
             "miDebuggerPath": "/usr/bin/gdb"
+        },
+
+        {
+            "name": "g++ - debug replace",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${fileDirname}/${fileBasenameNoExtension}",
+            "args": ["abcabcabc", "a", "x"],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "g++ build active file",
+            "miDebuggerPath": "/usr/bin/gdb"
         }
     ]
 }

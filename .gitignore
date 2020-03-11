@@ -3,3 +3,9 @@ regx.d
 obj/regx.o
 myapp
 src/match_tags
+src/match_group
+src/match_regx
+src/replace_string
+src/sub_match
+regx_test
+

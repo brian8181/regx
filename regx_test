@@ -39,3 +39,6 @@
 
 ./regx "a\\\\z" "a\\z"
 ./regx $(echo "a\\\\z") "a\\z"
+
+# assertions
+./regx "x(?=(abc))" "abcxabc"

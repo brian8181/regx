@@ -1,16 +1,17 @@
 #include <iostream>
 #include <string>
 #include <regex>
+#include <map> 
 
 using namespace std;
 
 int main(int argc, char* argv[]) 
 {
-    if(argc != 2)
+    if(argc != 3)
         return 0;
 
-    string exp = "\\<([A-z]+[A-z0-9]*)\\>";
-    string src(argv[1]);
+    string exp(argv[1]);
+    string src(argv[2]);
 
     cout << "regx [OPTIONS] PATTERN [FILE...]\n";
     cout << "pattern: " << "\"" << exp << "\"" << " -> " 
@@ -36,7 +37,17 @@ int main(int argc, char* argv[])
        
         smatch match = *i;
 
-        std::cout << match.str() << std::endl;
+        std::string tag_name = "testing";
+        
+        std::map<std::string,std::string> tag_map;
+        tag_map.insert(std::make_pair(match.str(1), "test1"));
+        tag_map.insert(std::make_pair(match.str(2), tag_name));
+        tag_map.insert(std::make_pair(match.str(3), tag_name));
+
+        std::cout << match.str(0) << std::endl;
+        std::cout << match.str(1) << "=" << tag_map[match.str(1)] << std::endl;
+        std::cout << match.str(2) << "=" << tag_map[match.str(2)] << std::endl;
+        std::cout << match.str(3) << "=" << tag_map[match.str(3)] << std::endl;
                 
         int pos = match.position() + (idx * (CURRENT_FG_COLOR.length() + RESET_FORMAT.length()));
         int len = match.length();
@@ -51,4 +62,10 @@ int main(int argc, char* argv[])
     }
 
     cout << bash_str << "\n";
+}
+
+string EscapeRegxChars(const string& s)
+{
+    size_t pos = bash_str.find(".");
+    bash_str.replace(pos, 1, "\\.");
 }
