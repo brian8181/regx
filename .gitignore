@@ -9,3 +9,4 @@ src/sub_match
 regx_test
 src/replace_all
 src/utility
+src/create_map
