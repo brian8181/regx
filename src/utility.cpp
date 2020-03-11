@@ -1,24 +1,6 @@
-#include <iostream>
 #include <string>
-#include <regex>
 
 using namespace std;
-
-void replace_all(string& s, const string& sub_str, const string& replace_str);
-
-int main(int argc, char* argv[]) 
-{
-    if(argc != 4)
-        return 0;
-
-    string src(argv[1]);
-    string sub_str(argv[2]);
-    string replace_str(argv[3]);
-
-    replace_all(src, sub_str, replace_str);
-
-    cout << src << endl;
-}
 
 void replace_all(string& s, const string& sub_str, const string& replace_str)
 {
