@@ -1,68 +1,88 @@
 #include <iostream>
 #include <string>
 #include <regex>
-#include <map> 
+//#include <iterator>
 
 using namespace std;
 
+void replace_all(string& s, const string& sub_str, const string& replace_str);
+
 int main(int argc, char* argv[]) 
 {
-
-    if(argc != 2)
+    if(argc != 3)
         return 0;
 
     string exp = "\\<([A-z]+[A-z0-9]*)\\>";
-    string src(argv[1]);
+    string pattern_str(argv[1]);
+    string input_str(argv[2]);
 
-    cout << "regx [OPTIONS] PATTERN [FILE...]\n";
-    cout << "pattern: " << "\"" << exp << "\"" << " -> " 
-            << "input: " << "\"" << src << "\"" << endl;
+    // cout << "regx [OPTIONS] PATTERN [FILE...]\n";
+    // cout << "pattern: " << "\"" << exp << "\"" << " -> " 
+    //         << "input: " << "\"" << src << "\"" << endl;
 
-    std::regex tags(exp);
-   
-    auto begin = std::sregex_iterator(src.begin(), src.end(), tags);
-    auto end = std::sregex_iterator();
+    replace_all(pattern_str, ".", "\\.");
+    std::regex e(exp);
     
-    std::cout << "\nFound "
-        << std::distance(begin, end)
-        << " matches:\n";
+    std::smatch sm1;    // same as std::match_results<string::const_iterator> sm;
+    std::regex_match (pattern_str,sm1,e);
 
-    int idx = 0;
-    string bash_str = src;
+    string rep_str = std::regex_replace(pattern_str, e, "([A-z0-9\\. _-]*)");
+
+    // std::regex rep(rep_str);
+    // std::smatch sm;    // same as std::match_results<string::const_iterator> sm;
+    // std::regex_match (rep_str, sm, rep);
+
+    //TESTING
+    // string s("abcxxxabcxxx");
+    // std::regex ep("abc");
+    // std::smatch sm;    // same as std::match_results<string::const_iterator> sm;
     
-    for (std::sregex_iterator i = begin; i != end; ++i)
+    // std::regex_match (s, sm, ep);
+    // std::string s ("subject");
+    // std::regex e1 ("(sub)(.*)");
+
+    std::string s (input_str);
+    //std::regex e1 ("([A-z0-9\\. _-]*)\\. ([A-z0-9\\. _-]*)-([A-z0-9\\. _-]*)\\.([A-z0-9\\. _-]*)");
+    std::regex e1 (rep_str);
+
+    std::smatch sm;    // same as std::match_results<string::const_iterator> sm;
+    std::regex_match (s,sm,e1);
+    //std::cout << "string object with " << sm.size() << " matches\n";
+
+
+    //std::cout << sm.str(0) << std::endl;
+    // std::cout << sm.str(1) << std::endl;
+    // std::cout << sm.str(2) << std::endl;
+    // std::cout << sm.str(3) << std::endl;
+    // std::cout << sm.str(4) << std::endl;
+    //std::cout << "sm size=" << sm.size() << std::endl;
+
+    // output tag values
+    int len = sm.size();
+    for(int i = 1; i < len; ++i)
     {
-        std::string FG_GREEN = "\e[32m";
-        std::string UNDERLINE = "\e[4m";
-        std::string RESET_FORMAT = "\e[0m";
-        std::string CURRENT_FG_COLOR = FG_GREEN + UNDERLINE;
-       
-        smatch match = *i;
-
-
-        std::string tag_name = "testing";
-        
-        std::map<std::string,std::string> tag_map;
-        tag_map.insert(std::make_pair(match.str(1), "test1"));
-        tag_map.insert(std::make_pair(match.str(2), tag_name));
-        tag_map.insert(std::make_pair(match.str(3), tag_name));
-
-        std::cout << match.str(0) << std::endl;
-        std::cout << match.str(1) << "=" << tag_map[match.str(1)] << std::endl;
-        std::cout << match.str(2) << "=" << tag_map[match.str(2)] << std::endl;
-        std::cout << match.str(3) << "=" << tag_map[match.str(3)] << std::endl;
-                
-        int pos = match.position() + (idx * (CURRENT_FG_COLOR.length() + RESET_FORMAT.length()));
-        int len = match.length();
-        // set bash green start postion
-        bash_str.insert(pos, CURRENT_FG_COLOR);
-
-        // reset bash color position
-        pos = pos + CURRENT_FG_COLOR.length() + len;
-        bash_str.insert(pos, RESET_FORMAT);
-       
-        ++idx;
+        std:cout << sm.str(i) << std::endl;
     }
 
-    cout << bash_str << "\n";
+
+    //std::cout << map.str(1) << "=" << tag_map[match.str(1)] << idx << std::endl;
+
+    // cout << src << "\n";
+    // cout << rep_str << "\n";
 }
+
+void replace_all(string& s, const string& sub_str, const string& replace_str)
+{
+    size_t pos = 0;
+    size_t len = s.length();
+   
+    pos = s.find(sub_str, pos);
+    while(pos < len)
+    {
+        s.replace(pos, sub_str.length(), replace_str);
+        pos += replace_str.length();
+        pos = s.find(sub_str, pos);
+    }
+}
+
+// ./create_map "<track>. <artist>-<album>-<title>.<type>" "10. The Rolling Stones-Exile On Main St-Brown Sugar.mp3"

@@ -1,1 +1,6 @@
 ./src/match_tags "<track>. <artist>-<album>-<title>.<type>"
+#errors below
+./src/match_group "[A-z0-9-_\(\)\. ]*\\<([A-z]+[A-z0-9]*)\\>[A-z0-9\. ]*" "3k4k.5k <tag1>uufnrj<tag2><tag3>sss" 
+
+# works for now
+./src/match_group "\<([A-z0-9]+)\>" "3k4k.5k <tag1>uufnrj<tag2><tag3>sss<tag55>" 

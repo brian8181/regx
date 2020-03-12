@@ -46,6 +46,10 @@ int main(int argc, char* argv[])
         bash_str.insert(pos, RESET_FORMAT);
        
         ++idx;
+
+        //BKP TESTING 
+        std::cout << match.str(1) << std::endl;
+        std::cout << match.str(2) << std::endl;
     }
 
     cout << bash_str << "\n";

@@ -85,6 +85,28 @@
         ],
         "preLaunchTask": "g++ build active file",
         "miDebuggerPath": "/usr/bin/gdb"
+    },
+    {
+        "name": "g++ - DEBUG GROUPS",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${fileDirname}/${fileBasenameNoExtension}",
+        "args": ["<track>. <album>-<title>", "10. Foo-bar"],
+        "stopAtEntry": false,
+        "cwd": "${workspaceFolder}",
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "gdb",
+        "setupCommands": [
+            {
+                "description": "Enable pretty-printing for gdb",
+                "text": "-enable-pretty-printing",
+                "ignoreFailures": true
+            }
+        ],
+        "preLaunchTask": "g++ build active file",
+        "miDebuggerPath": "/usr/bin/gdb"
     }
+
     ]
 }

@@ -36,9 +36,13 @@
 ./src/regx "\"\w*\"" "\"aaa\"bbb\"ccc\""
 # error
 ./src/regx \"\w*\"  \"aaa\"bbb\"
-
+ 
 ./regx "a\\\\z" "a\\z"
 ./regx $(echo "a\\\\z") "a\\z"
 
 # assertions
 ./regx "x(?=(abc))" "abcxabc"
+
+./regx "([A-z0-9_-]*)\. ([A-z0-9_-]*)-([A-z0-9_-]*)\.([A-z0-9_-]*)" "10. Beatles-White.mp3"
+./regx "([A-z0-9 _-]*)\. ([A-z0-9 _-]*)-([A-z0-9 _-]*)\.([A-z0-9 _-]*)" "12. The Rolling Stones-Main St.mp3"
+./regx "^([A-z0-9\. _-]*)\. ([A-z0-9\. _-]*)-([A-z0-9\. _-]*)\.([A-z0-9\. _-]*)$" "12. The Rolling Stones-Main St..mp3"
