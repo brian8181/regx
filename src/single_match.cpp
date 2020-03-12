@@ -18,5 +18,4 @@ int main(int argc, char* argv[])
     regex_match (input,sm,e);
 
     cout << sm.str(0) << endl;
-
 }
