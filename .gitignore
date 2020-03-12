@@ -1,4 +1,3 @@
-regx
 regx.d
 obj/regx.o
 myapp
@@ -6,9 +5,9 @@ src/match_tags
 src/match_group
 src/match_regx
 src/sub_match
-regx_test
 src/replace_all
 src/utility
 src/create_map
 src/smatch
 src/single_match
+src/regx
