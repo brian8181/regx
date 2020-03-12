@@ -12,7 +12,17 @@ int main(int argc, char* argv[])
     string exp(argv[1]);
     string src(argv[2]);
 
-    cout << "regx [OPTIONS] PATTERN [FILE...]\n";
+    std::string FG_GREEN = "\e[32m";
+    std::string UNDERLINE = "\e[4m";
+    std::string BOLD = "\e[1m";
+    std::string RESET_FORMAT = "\e[0m";
+    std::string CURRENT_FG_COLOR = FG_GREEN + UNDERLINE;
+       
+    //cout << "\nregx [OPTIONS] PATTERN INPUT\n";
+    cout << "\n" << BOLD << "regx" << RESET_FORMAT << " " 
+         << UNDERLINE << "PATTERN" << RESET_FORMAT << " " 
+         << UNDERLINE << "INPUT"   << RESET_FORMAT << "\n";
+
     cout << "pattern: " << "\"" << exp << "\"" << " -> " 
             << "input: " << "\"" << src << "\"" << endl;
 
@@ -28,11 +38,6 @@ int main(int argc, char* argv[])
     string bash_str = src;
     for (std::sregex_iterator i = begin; i != end; ++i)
     {
-        std::string FG_GREEN = "\e[32m";
-        std::string UNDERLINE = "\e[4m";
-        std::string RESET_FORMAT = "\e[0m";
-        std::string CURRENT_FG_COLOR = FG_GREEN + UNDERLINE;
-       
         smatch match = *i;
                 
         int pos = match.position() + (idx * (CURRENT_FG_COLOR.length() + RESET_FORMAT.length()));
@@ -46,11 +51,7 @@ int main(int argc, char* argv[])
         bash_str.insert(pos, RESET_FORMAT);
        
         ++idx;
-
-        //BKP TESTING 
-        std::cout << match.str(1) << std::endl;
-        std::cout << match.str(2) << std::endl;
     }
 
-    cout << bash_str << "\n";
+    cout << bash_str << "\n\n";
 }
