@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <regex>
-//#include <iterator>
+#include <map>
 
 using namespace std;
 
@@ -12,63 +12,40 @@ int main(int argc, char* argv[])
     if(argc != 3)
         return 0;
 
-    string exp = "\\<([A-z]+[A-z0-9]*)\\>";
+    const string TAG_MATCH_EXP_STR = "\\<([A-z]+[A-z0-9]*)\\>";
     string pattern_str(argv[1]);
     string input_str(argv[2]);
 
-    // cout << "regx [OPTIONS] PATTERN [FILE...]\n";
-    // cout << "pattern: " << "\"" << exp << "\"" << " -> " 
-    //         << "input: " << "\"" << src << "\"" << endl;
+    // output command format
+    cout << "\ncreate_map [OPTIONS] PATTERN INPUT\n\n";
+    cout << "pattern: " << "\"" << pattern_str << "\"" << "\n";
+    cout << "input: " << "\"" << input_str << "\"" << "\n\n";
 
+    // create regx from pattern
     replace_all(pattern_str, ".", "\\.");
-    std::regex e(exp);
+    const std::regex TAG_EXP(TAG_MATCH_EXP_STR);
+    const string REPLACE_EXP_STR = std::regex_replace(pattern_str, TAG_EXP, "([A-z0-9\\. _-]*)");
+    const std::regex REPLACE_EXP (REPLACE_EXP_STR);
     
-    std::smatch sm1;    // same as std::match_results<string::const_iterator> sm;
-    std::regex_match (pattern_str,sm1,e);
-
-    string rep_str = std::regex_replace(pattern_str, e, "([A-z0-9\\. _-]*)");
-
-    // std::regex rep(rep_str);
-    // std::smatch sm;    // same as std::match_results<string::const_iterator> sm;
-    // std::regex_match (rep_str, sm, rep);
-
-    //TESTING
-    // string s("abcxxxabcxxx");
-    // std::regex ep("abc");
-    // std::smatch sm;    // same as std::match_results<string::const_iterator> sm;
+    // create smatch
+    std::smatch sm;    
+    std::regex_match (input_str, sm, REPLACE_EXP);
     
-    // std::regex_match (s, sm, ep);
-    // std::string s ("subject");
-    // std::regex e1 ("(sub)(.*)");
-
-    std::string s (input_str);
-    //std::regex e1 ("([A-z0-9\\. _-]*)\\. ([A-z0-9\\. _-]*)-([A-z0-9\\. _-]*)\\.([A-z0-9\\. _-]*)");
-    std::regex e1 (rep_str);
-
-    std::smatch sm;    // same as std::match_results<string::const_iterator> sm;
-    std::regex_match (s,sm,e1);
-    //std::cout << "string object with " << sm.size() << " matches\n";
-
-
-    //std::cout << sm.str(0) << std::endl;
-    // std::cout << sm.str(1) << std::endl;
-    // std::cout << sm.str(2) << std::endl;
-    // std::cout << sm.str(3) << std::endl;
-    // std::cout << sm.str(4) << std::endl;
-    //std::cout << "sm size=" << sm.size() << std::endl;
-
-    // output tag values
-    int len = sm.size();
-    for(int i = 1; i < len; ++i)
+    // iterate through tag matches and create map
+    int idx = 1;
+    auto begin = std::sregex_iterator(pattern_str.begin(), pattern_str.end(), TAG_EXP);
+    auto end = std::sregex_iterator();
+    for (std::sregex_iterator i = begin; i != end; ++i)
     {
-        std:cout << sm.str(i) << std::endl;
+        smatch match = *i;
+        std::map<std::string,std::string> tag_map;
+        tag_map.insert(std::make_pair(match.str(1), sm.str(idx)));
+      
+        std::cout << match.str(1) << " = " << tag_map[match.str(1)] << std::endl;
+        ++idx;
     }
-
-
-    //std::cout << map.str(1) << "=" << tag_map[match.str(1)] << idx << std::endl;
-
-    // cout << src << "\n";
-    // cout << rep_str << "\n";
+    
+    cout << "\n";
 }
 
 void replace_all(string& s, const string& sub_str, const string& replace_str)

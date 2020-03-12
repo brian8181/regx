@@ -40,15 +40,13 @@ int main(int argc, char* argv[])
         std::string tag_name = "testing";
         
         std::map<std::string,std::string> tag_map;
-        tag_map.insert(std::make_pair(match.str(1), "test1"));
-        tag_map.insert(std::make_pair(match.str(2), tag_name));
-        tag_map.insert(std::make_pair(match.str(3), tag_name));
+        tag_map.insert(std::make_pair(match.str(1), "test"));
+        // tag_map.insert(std::make_pair(match.str(1), "test2"));
+        // tag_map.insert(std::make_pair(match.str(1), "test3"));
 
         std::cout << match.str(0) << std::endl;
-        std::cout << match.str(1) << "=" << tag_map[match.str(1)] << std::endl;
-        std::cout << match.str(2) << "=" << tag_map[match.str(2)] << std::endl;
-        std::cout << match.str(3) << "=" << tag_map[match.str(3)] << std::endl;
-                
+        std::cout << match.str(1) << "=" << tag_map[match.str(1)] << idx << std::endl;
+                     
         int pos = match.position() + (idx * (CURRENT_FG_COLOR.length() + RESET_FORMAT.length()));
         int len = match.length();
         // set bash green start postion
