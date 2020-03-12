@@ -12,31 +12,26 @@ int main(int argc, char* argv[])
     string exp(argv[1]);
     string src(argv[2]);
 
-    std::string FG_GREEN = "\e[32m";
-    std::string UNDERLINE = "\e[4m";
-    std::string BOLD = "\e[1m";
-    std::string RESET_FORMAT = "\e[0m";
-    std::string CURRENT_FG_COLOR = FG_GREEN + UNDERLINE;
+    string FG_GREEN = "\e[32m";
+    string UNDERLINE = "\e[4m";
+    string BOLD = "\e[1m";
+    string RESET_FORMAT = "\e[0m";
+    string CURRENT_FG_COLOR = FG_GREEN + UNDERLINE;
        
-    //cout << "\nregx [OPTIONS] PATTERN INPUT\n";
     cout << "\n" << BOLD << "regx" << RESET_FORMAT << " " 
          << UNDERLINE << "PATTERN" << RESET_FORMAT << " " 
          << UNDERLINE << "INPUT"   << RESET_FORMAT << "\n";
 
     cout << "pattern: " << "\"" << exp << "\"" << " -> " 
-            << "input: " << "\"" << src << "\"" << endl;
-
-    std::regex tags(exp);
-    auto begin = std::sregex_iterator(src.begin(), src.end(), tags);
-    auto end = std::sregex_iterator();
-    
-    std::cout << "\nFound "
-        << std::distance(begin, end)
-        << " matches:\n";
+         << "input: " << "\"" << src << "\"" << endl;
 
     int idx = 0;
     string bash_str = src;
-    for (std::sregex_iterator i = begin; i != end; ++i)
+    regex tags_regx(exp);
+    auto begin = sregex_iterator(src.begin(), src.end(), tags_regx);
+    auto end = sregex_iterator();
+    
+    for (sregex_iterator i = begin; i != end; ++i)
     {
         smatch match = *i;
                 
@@ -53,5 +48,6 @@ int main(int argc, char* argv[])
         ++idx;
     }
 
+    cout << "\nFound " << std::distance(begin, end) << " matches:\n";
     cout << bash_str << "\n\n";
 }
