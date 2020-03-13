@@ -31,28 +31,28 @@ int main(int argc, char* argv[])
 
     // create regx from pattern
     replace_all(pattern_str, ".", "\\.");
-    const std::regex TAG_EXP(TAG_MATCH_EXP_STR);
+    const regex TAG_EXP(TAG_MATCH_EXP_STR);
     const string REPLACE_EXP_STR 
-        = "^" + std::regex_replace(pattern_str, TAG_EXP, "(" + SPECIAL_CHARS_STR + "*)" ) + "$";
-    const std::regex REPLACE_EXP (REPLACE_EXP_STR);
+        = "^" + regex_replace(pattern_str, TAG_EXP, "(" + SPECIAL_CHARS_STR + "*)" ) + "$";
+    const regex REPLACE_EXP (REPLACE_EXP_STR);
     
     // create smatch
-    std::smatch sm;    
-    std::regex_match (input_str, sm, REPLACE_EXP);
+    smatch sm;    
+    regex_match (input_str, sm, REPLACE_EXP);
     
     // iterate through tag matches and create map
     int idx = 1;
-    auto begin = std::sregex_iterator(pattern_str.begin(), pattern_str.end(), TAG_EXP);
-    auto end = std::sregex_iterator();
+    auto begin = sregex_iterator(pattern_str.begin(), pattern_str.end(), TAG_EXP);
+    auto end = sregex_iterator();
 
-    for (std::sregex_iterator i = begin; i != end; ++i)
+    for (sregex_iterator i = begin; i != end; ++i)
     {
         smatch match = *i;
-        std::map<std::string,std::string> tag_map;
-        tag_map.insert(std::make_pair(match.str(1), sm.str(idx)));
+        map<string,string> tag_map;
+        tag_map.insert(make_pair(match.str(1), sm.str(idx)));
       
-        std::cout << FMT_BOLD + FMT_FG_GREEN << match.str(1) << FMT_RESET << " = " 
-                  << tag_map[match.str(1)] << std::endl;
+        cout << FMT_BOLD + FMT_FG_GREEN << match.str(1) << FMT_RESET << " = " 
+                  << tag_map[match.str(1)] << endl;
         ++idx;
     }
     
@@ -74,6 +74,7 @@ void replace_all(string& s, const string& sub_str, const string& replace_str)
 }
 
 /*
+USAGE:
 ./create_map "<track>. <artist>-<album>-<title>.<type>" "10. The Rolling Stones-Exile On Main Street-Brown Sugar.mp3"
 ./create_map "<track>: <artist>_<album>_<title>.<type>" "10: The Rolling Stones_Exile On Main Street_Brown Sugar.mp3"
 ./create_map "<test>" "ABCDEFGHIJKLMPNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+_-*^|:[]{}'"
