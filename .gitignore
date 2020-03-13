@@ -11,3 +11,4 @@ src/create_map
 src/smatch
 src/single_match
 src/regx
+src/std_replace

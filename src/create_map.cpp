@@ -2,6 +2,7 @@
 #include <string>
 #include <regex>
 #include <map>
+//#include <algorithm>
 
 using namespace std;
 
@@ -12,6 +13,8 @@ int main(int argc, char* argv[])
     if(argc != 3)
         return 0;
 
+    // test raw string delimiter
+    //const string TAG_MATCH_EXP_STR = R"(\<([A-z]+[A-z0-9]*)\>)";
     const string TAG_MATCH_EXP_STR = "\\<([A-z]+[A-z0-9]*)\\>";
     string pattern_str(argv[1]);
     string input_str(argv[2]);
@@ -35,6 +38,9 @@ int main(int argc, char* argv[])
     int idx = 1;
     auto begin = std::sregex_iterator(pattern_str.begin(), pattern_str.end(), TAG_EXP);
     auto end = std::sregex_iterator();
+
+    //replace(begin, end, 'a', 'b');
+
     for (std::sregex_iterator i = begin; i != end; ++i)
     {
         smatch match = *i;
