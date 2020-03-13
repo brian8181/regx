@@ -13,9 +13,11 @@ int main(int argc, char* argv[])
     if(argc != 3)
         return 0;
 
-    // test raw string delimiter
-    //const string TAG_MATCH_EXP_STR = R"(\<([A-z]+[A-z0-9]*)\>)";
-    const string TAG_MATCH_EXP_STR = "\\<([A-z]+[A-z0-9]*)\\>";
+    // sets allowed pattern for tag names
+    const string TAG_MATCH_EXP_STR = R"(\<([A-z]+[A-z0-9]*)\>)";
+    // regx special chars = ^ $ \ . * + ? ( ) [ ] { } | :
+    const string SPECIAL_CHARS_STR = "([A-z0-9 \\.\\*\\+\\:\\'\\[\\]\\{\\}\\|_-]*)";
+
     string pattern_str(argv[1]);
     string input_str(argv[2]);
 
@@ -27,7 +29,7 @@ int main(int argc, char* argv[])
     // create regx from pattern
     replace_all(pattern_str, ".", "\\.");
     const std::regex TAG_EXP(TAG_MATCH_EXP_STR);
-    const string REPLACE_EXP_STR = std::regex_replace(pattern_str, TAG_EXP, "([A-z0-9\\. _-]*)");
+    const string REPLACE_EXP_STR = "^" + std::regex_replace(pattern_str, TAG_EXP, SPECIAL_CHARS_STR ) + "$";
     const std::regex REPLACE_EXP (REPLACE_EXP_STR);
     
     // create smatch
@@ -38,8 +40,6 @@ int main(int argc, char* argv[])
     int idx = 1;
     auto begin = std::sregex_iterator(pattern_str.begin(), pattern_str.end(), TAG_EXP);
     auto end = std::sregex_iterator();
-
-    //replace(begin, end, 'a', 'b');
 
     for (std::sregex_iterator i = begin; i != end; ++i)
     {
@@ -68,4 +68,5 @@ void replace_all(string& s, const string& sub_str, const string& replace_str)
     }
 }
 
-// ./create_map "<track>. <artist>-<album>-<title>.<type>" "10. The Rolling Stones-Exile On Main St-Brown Sugar.mp3"
+// ./create_map "<track>. <artist>-<album>-<title>.<type>" "10. The Rolling Stones-Exile On Main Street-Brown Sugar.mp3"
+// ./create_map "<track>: <artist>_<album>_<title>.<type>" "10: The Rolling Stones_Exile On Main Street_Brown Sugar.mp3"
