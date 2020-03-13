@@ -1,5 +1,5 @@
 #ifndef _utility_h_included_
-#define _utility_included_
+#define _utility_h_included_
 
 #include <string>
 

@@ -12,15 +12,15 @@ int main(int argc, char* argv[])
     string exp(argv[1]);
     string src(argv[2]);
 
-    string FG_GREEN = "\e[32m";
-    string UNDERLINE = "\e[4m";
-    string BOLD = "\e[1m";
-    string RESET_FORMAT = "\e[0m";
-    string CURRENT_FG_COLOR = FG_GREEN + UNDERLINE;
+    const string FMT_FG_GREEN  = "\e[32m";
+    const string FMT_UNDERLINE = "\e[4m";
+    const string FMT_BOLD      = "\e[1m";
+    const string FMT_RESET     = "\e[0m";
+    const string CURRENT_FG_COLOR = FMT_FG_GREEN + FMT_UNDERLINE;
        
-    cout << "\n" << BOLD << "regx" << RESET_FORMAT << " " 
-         << UNDERLINE << "PATTERN" << RESET_FORMAT << " " 
-         << UNDERLINE << "INPUT"   << RESET_FORMAT << "\n";
+    cout << "\n" << FMT_BOLD << "regx" << FMT_RESET << " " 
+         << FMT_UNDERLINE << "PATTERN" << FMT_RESET << " " 
+         << FMT_UNDERLINE << "INPUT"   << FMT_RESET << "\n\n";
 
     cout << "pattern: " << "\"" << exp << "\"" << " -> " 
          << "input: " << "\"" << src << "\"" << endl;
@@ -35,7 +35,7 @@ int main(int argc, char* argv[])
     {
         smatch match = *i;
                 
-        int pos = match.position() + (idx * (CURRENT_FG_COLOR.length() + RESET_FORMAT.length()));
+        int pos = match.position() + (idx * (CURRENT_FG_COLOR.length() + FMT_RESET.length()));
         int len = match.length();
 
         // set bash green start postion
@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
 
         // reset bash color position
         pos = pos + CURRENT_FG_COLOR.length() + len;
-        bash_str.insert(pos, RESET_FORMAT);
+        bash_str.insert(pos, FMT_RESET);
        
         ++idx;
     }

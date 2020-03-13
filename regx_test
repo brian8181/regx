@@ -46,3 +46,5 @@
 ./regx "([A-z0-9_-]*)\. ([A-z0-9_-]*)-([A-z0-9_-]*)\.([A-z0-9_-]*)" "10. Beatles-White.mp3"
 ./regx "([A-z0-9 _-]*)\. ([A-z0-9 _-]*)-([A-z0-9 _-]*)\.([A-z0-9 _-]*)" "12. The Rolling Stones-Main St.mp3"
 ./regx "^([A-z0-9\. _-]*)\. ([A-z0-9\. _-]*)-([A-z0-9\. _-]*)\.([A-z0-9\. _-]*)$" "12. The Rolling Stones-Main St..mp3"
+
+./regx "a.{2,3}b" "a123b axxxb a---b a12b a1234b a1b"

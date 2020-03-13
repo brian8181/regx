@@ -12,3 +12,7 @@ src/smatch
 src/single_match
 src/regx
 src/std_replace
+src/formating
+src/regx_c
+src/regx_ex2_c
+regx_test
