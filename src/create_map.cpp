@@ -73,6 +73,8 @@ void replace_all(string& s, const string& sub_str, const string& replace_str)
     }
 }
 
-// ./create_map "<track>. <artist>-<album>-<title>.<type>" "10. The Rolling Stones-Exile On Main Street-Brown Sugar.mp3"
-// ./create_map "<track>: <artist>_<album>_<title>.<type>" "10: The Rolling Stones_Exile On Main Street_Brown Sugar.mp3"
-// ./create_map "<test>" "ABCDEFGHIJKLMPNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+_-*^|:[]{}'"
+/*
+./create_map "<track>. <artist>-<album>-<title>.<type>" "10. The Rolling Stones-Exile On Main Street-Brown Sugar.mp3"
+./create_map "<track>: <artist>_<album>_<title>.<type>" "10: The Rolling Stones_Exile On Main Street_Brown Sugar.mp3"
+./create_map "<test>" "ABCDEFGHIJKLMPNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+_-*^|:[]{}'"
+*/
