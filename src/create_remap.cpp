@@ -12,7 +12,7 @@ const string FMT_RESET     = "\e[0m";
 // sets allowed pattern for tag names
 const string TAG_MATCH_EXP_STR = R"(\<([A-z]+[A-z0-9]*)\>)";
 // regx special chars = ^ $ \ . * + ? ( ) [ ] { } | :
-const string SPECIAL_CHARS_STR = R"([A-z0-9 \^\$\.\*\+\:\'\[\]\{\}\|_-])";
+const string SPECIAL_CHARS_STR = R"([A-z0-9 \^\$\.\*\+\:\'\[\]\{\}\|;,@#_-])";
 const regex TAG_EXP(TAG_MATCH_EXP_STR);
 
 void replace_all(string& s, const string& sub_str, const string& replace_str);
@@ -27,10 +27,13 @@ int main(int argc, char* argv[])
     string input_str(argv[2]);
     string output_pattern_str(argv[3]);
 
-    cout << "\n" << FMT_BOLD << "create_remap" << FMT_RESET << " " 
-          << FMT_UNDERLINE << "INPUT_FORMAT" << FMT_RESET << " "
-          << FMT_UNDERLINE << "INPUT" << FMT_RESET << " "  
-          << FMT_UNDERLINE << "OUTPUT_FORMAT" << FMT_RESET << "\n\n";
+    if(0)
+    {
+        cout << "\n" << FMT_BOLD << "create_remap" << FMT_RESET << " " 
+            << FMT_UNDERLINE << "INPUT_FORMAT" << FMT_RESET << " "
+            << FMT_UNDERLINE << "INPUT" << FMT_RESET << " "  
+            << FMT_UNDERLINE << "OUTPUT_FORMAT" << FMT_RESET << "\n\n";
+    }
 
     map<string, string> tag_map;
     create_map(input_pattern_str, input_str, tag_map);
@@ -63,7 +66,6 @@ int main(int argc, char* argv[])
     }
     
     cout << formatted_output_str << endl;
-    cout << "\n";
 }
 
 map<string, string>& create_map(string pattern, string s, map<string, string>& map)
@@ -111,4 +113,8 @@ void replace_all(string& s, const string& sub_str, const string& replace_str)
 USAGE:
 ./create_remap "<track>. <artist>-<album>-<title>.<type>" "10. The Rolling Stones-Exile On Main Street-Brown Sugar.mp3" "<track>: <title>.<type"
 ./create_remap "<first> <last>:<phone> <sex>" "Alfred E. Numan:555-555-9696 M" "Sex : <sex>    Name :<last>, <first>    Phone : <phone>"
+./create_remap "<track>. <artist> - <album> - <title>.<type>"  "10. The Rolling Stones - Exile On Main Street - Brown Sugar.mp3"  "/<artist>/<album>/<track>. <title>.<type>"
+
+mkdir -p "$(./create_remap "<track>. <artist> - <album> - <title>.<type>"  "10. The Rolling Stones - Exile On Main Street - Brown Sugar.mp3"  "./<artist>/<album>/")" 
+touch "$(./create_remap "<track>. <artist> - <album> - <title>.<type>"  "10. The Rolling Stones - Exile On Main Street - Brown Sugar.mp3"  "./<artist>/<album>/<track>. <title>.<type>")"
 */

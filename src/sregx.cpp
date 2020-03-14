@@ -12,7 +12,6 @@ int main(int argc, char* argv[])
     string exp(argv[1]);
     string input(argv[2]);
 
-   
     regex e(exp);
     smatch sm;    // same as std::match_results<string::const_iterator> sm;
     regex_match (input,sm,e);

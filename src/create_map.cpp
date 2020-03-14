@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
     // sets allowed pattern for tag names
     const string TAG_MATCH_EXP_STR = R"(\<([A-z]+[A-z0-9]*)\>)";
     // regx special chars = ^ $ \ . * + ? ( ) [ ] { } | :
-    const string SPECIAL_CHARS_STR = R"([A-z0-9 \^\$\.\*\+\:\'\[\]\{\}\|_-])";
+    const string SPECIAL_CHARS_STR = R"([A-z0-9 \^\$\.\*\+\:\'\[\]\{\}\|;,@#_-])";
 
     // create regx from pattern
     replace_all(pattern_str, ".", "\\.");
