@@ -16,63 +16,63 @@ const string SPECIAL_CHARS_STR = R"([A-z0-9 \^\$\.\*\+\:\'\[\]\{\}\|;,@#_-])";
 const regex TAG_EXP(TAG_MATCH_EXP_STR);
 
 void replace_all(string& s, const string& sub_str, const string& replace_str);
-map<string, string>& create_map(string& pattern, const string& s, map<string, string>& map);
-//map<string, string>& create_map(const string& pattern, const string& s, map<string, string>& map);
-string& create_formated_output(const string& s, map<string, string>& map, string& formated_output);
+map<string, string>& create_map(string pattern, string s, map<string, string>& map);
 
 int main(int argc, char* argv[]) 
 {
-     if(argc < 4)
-            return 0;
+    if(argc != 4)
+        return 0;
 
-    // if(0)
-    // {
-    //     cout << "\n" << FMT_BOLD << "create_remap" << FMT_RESET << " " 
-    //         << FMT_UNDERLINE << "INPUT_FORMAT" << FMT_RESET << " "
-    //         << FMT_UNDERLINE << "INPUT" << FMT_RESET << " "  
-    //         << FMT_UNDERLINE << "OUTPUT_FORMAT" << FMT_RESET << "\n\n";
-    // }
+    string input_pattern_str(argv[1]);
+    string input_str(argv[2]);
+    string output_pattern_str(argv[3]);
 
-    if(argc < 5)
+    if(0)
     {
-        string input_pattern_str(argv[1]);
-        string input_str(argv[2]);
-        string output_pattern_str(argv[3]);
-
-        map<string, string> tag_map;
-        create_map(input_pattern_str, input_str, tag_map);
-        string formated_output;
-
-        create_formated_output(output_pattern_str, tag_map, formated_output);
-        cout << formated_output << endl;
-    }
-    else
-    {
-        //TODO file option ...
-        string opts(argv[1]);
-        string input_pattern_str(argv[2]);
-        string input_str(argv[3]);
-        string output_pattern_str(argv[4]);
-
-        map<string, string> tag_map;
-        create_map(input_pattern_str, input_str, tag_map);
-        string formated_output;
-
-        if(opts != "-f")
-            return 0;
-       
-        // open file iter
-        create_formated_output(output_pattern_str, tag_map, formated_output);
-        cout << formated_output << endl;
+        cout << "\n" << FMT_BOLD << "create_remap" << FMT_RESET << " " 
+            << FMT_UNDERLINE << "INPUT_FORMAT" << FMT_RESET << " "
+            << FMT_UNDERLINE << "INPUT" << FMT_RESET << " "  
+            << FMT_UNDERLINE << "OUTPUT_FORMAT" << FMT_RESET << "\n\n";
     }
 
-    return 0;
+    map<string, string> tag_map;
+    create_map(input_pattern_str, input_str, tag_map);
+
+    auto begin = sregex_iterator(output_pattern_str.begin(), output_pattern_str.end(), TAG_EXP);
+    auto end = sregex_iterator();
+    string formatted_output_str = output_pattern_str;
+   
+    int format_str_pos = 0;
+    int format_str_end = 0;
+    int output_str_pos = 0;
+    int relative_pos = 0;
+
+    for (sregex_iterator i = begin; i != end; ++i)
+    {
+        smatch match = *i;
+        string tag_value = tag_map[match.str(1)];
+
+        // get current match position 
+        format_str_pos = match.position();
+        // set realtive to last end
+        relative_pos = format_str_pos - format_str_end;
+        output_str_pos += relative_pos;
+        // set new end
+        format_str_end = format_str_pos + match.length();
+        // replace <tag> with tag value
+        formatted_output_str.replace(output_str_pos, match.length(), tag_value);
+        // set pos to end of replace
+        output_str_pos += tag_value.length(); 
+    }
+    
+    cout << formatted_output_str << endl;
 }
 
-map<string, string>& create_map(string& pattern, const string& s, map<string, string>& map)
+map<string, string>& create_map(string pattern, string s, map<string, string>& map)
 {
     // create regx from pattern
     replace_all(pattern, ".", "\\.");
+    //const regex TAG_EXP(TAG_MATCH_EXP_STR);
     const string REPLACE_EXP_STR 
         = "^" + regex_replace(pattern, TAG_EXP, "(" + SPECIAL_CHARS_STR + "*)" ) + "$";
     const regex REPLACE_EXP (REPLACE_EXP_STR);
@@ -93,38 +93,6 @@ map<string, string>& create_map(string& pattern, const string& s, map<string, st
     }
 
     return map;
-}
-
-string& create_formated_output(const string& s, map<string, string>& map, string& formated_output)
-{
-    auto begin = sregex_iterator(s.begin(), s.end(), TAG_EXP);
-    auto end = sregex_iterator();
-    formated_output = s;
-   
-    int format_str_pos = 0;
-    int format_str_end = 0;
-    int output_str_pos = 0;
-    int relative_pos = 0;
-
-    for (sregex_iterator i = begin; i != end; ++i)
-    {
-        smatch match = *i;
-        string tag_value = map[match.str(1)];
-        
-        // get current match position 
-        format_str_pos = match.position();
-        // set realtive to last end
-        relative_pos = format_str_pos - format_str_end;
-        output_str_pos += relative_pos;
-        // set new end
-        format_str_end = format_str_pos + match.length();
-        // replace <tag> with tag value
-        formated_output.replace(output_str_pos, match.length(), tag_value);
-        // set pos to end of replace
-        output_str_pos += tag_value.length(); 
-    }
-
-    return formated_output;
 }
 
 void replace_all(string& s, const string& sub_str, const string& replace_str)
