@@ -71,7 +71,7 @@
         "type": "cppdbg",
         "request": "launch",
         "program": "${fileDirname}/${fileBasenameNoExtension}",
-        "args": ["<track>. <artist>-<album>-<title>.<type>", "12. The Rolling Stones-Exile on Main Street-Brown Sugar.mp3", "<track>. <title>.<mp3>"],
+        "args": ["-f", "<track>. <artist>-<album>-<title>.<type>", "12. The Rolling Stones-Exile on Main Street-Brown Sugar.mp3", "<track>. <title>.<mp3>"],
         "stopAtEntry": false,
         "cwd": "${workspaceFolder}",
         "environment": [],

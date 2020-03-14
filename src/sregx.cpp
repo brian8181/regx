@@ -16,5 +16,6 @@ int main(int argc, char* argv[])
     smatch sm;    // same as std::match_results<string::const_iterator> sm;
     regex_match (input,sm,e);
 
-    cout << sm.str(0) << endl;
+    if(sm.size() > 0)
+        cout << sm.str(0) << endl;
 }

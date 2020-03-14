@@ -9,7 +9,6 @@ src/replace_all
 src/utility
 src/create_map
 src/smatch
-src/single_match
 src/regx
 src/std_replace
 src/formating
@@ -18,3 +17,4 @@ src/regx_ex2_c
 regx_test
 src/create_remap
 src/10. The Rolling Stones-Exile On Main Street-Brown Sugar.mp3
+src/sregx
