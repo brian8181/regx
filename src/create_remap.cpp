@@ -24,7 +24,7 @@ string& create_formated_output(const string& s, map<string, string>& map, string
 int main(int argc, char* argv[]) 
 {
      if(argc < 4)
-            return 0;
+            return -1; //args error
 
     // if(0)
     // {
@@ -51,54 +51,29 @@ int main(int argc, char* argv[])
     }
     else
     {
-        //TODO file option ...
         string opts(argv[1]);
         input_pattern_str = argv[2];
         string input_str(argv[3]);
         string output_pattern_str(argv[4]);
  
         if(opts != "-f")
-            return 0;
-
-        // // *BEG-DEBUG!*
-        // //string s1 = input_pattern_str;
-        // input_str = "12. The Rolling Stones-Exile on Main Street-Paint It Black.mp3";
+            return -1; //args error
+        
+        // iter all lines
         map<string, string> tag_map;
-        // create_map(input_pattern_str, input_str, tag_map);
-
         string formated_out;
-        // create_formated_output(output_pattern_str, tag_map, formated_out);
-        // cout << formated_out << endl;
-        // // *END-DEBUG!*
-
-        // // *BEG-DEBUG!*
-        // //s1 = input_pattern_str;
-        // input_str = "12. The Rolling Stones-Exile on Main Street-Rolling Dice.mp3";
-        // tag_map.clear();
-        // create_map(input_pattern_str, input_str, tag_map);
-
-        // create_formated_output(output_pattern_str, tag_map, formated_out);
-        // cout << formated_out << endl;
-        // // *END-DEBUG!*
-
         std::ifstream file(input_str);
-        //std::string input_str;
+
         while (std::getline(file, input_str))
         { 
-            
             tag_map.clear();
             create_map(input_pattern_str, input_str, tag_map);
-
             // open file iter
             formated_out;
             create_formated_output(output_pattern_str, tag_map, formated_out);
             cout << formated_out << endl;
-            
         }
-       
-       
     }
-
     return 0;
 }
 
