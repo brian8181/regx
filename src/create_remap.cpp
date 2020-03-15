@@ -2,6 +2,7 @@
 #include <string>
 #include <regex>
 #include <map>
+#include <fstream>
 
 using namespace std;
 
@@ -16,7 +17,7 @@ const string SPECIAL_CHARS_STR = R"([A-z0-9 \^\$\.\*\+\:\'\[\]\{\}\|;,@#_-])";
 const regex TAG_EXP(TAG_MATCH_EXP_STR);
 
 void replace_all(string& s, const string& sub_str, const string& replace_str);
-map<string, string>& create_map(string& pattern, const string& s, map<string, string>& map);
+map<string, string>& create_map(const string& pattern, const string& s, map<string, string>& map);
 //map<string, string>& create_map(const string& pattern, const string& s, map<string, string>& map);
 string& create_formated_output(const string& s, map<string, string>& map, string& formated_output);
 
@@ -33,48 +34,82 @@ int main(int argc, char* argv[])
     //         << FMT_UNDERLINE << "OUTPUT_FORMAT" << FMT_RESET << "\n\n";
     // }
 
+    string input_pattern_str;
+
     if(argc < 5)
     {
-        string input_pattern_str(argv[1]);
+        input_pattern_str = argv[1];
         string input_str(argv[2]);
         string output_pattern_str(argv[3]);
 
         map<string, string> tag_map;
         create_map(input_pattern_str, input_str, tag_map);
-        string formated_output;
+        string formated_out;
 
-        create_formated_output(output_pattern_str, tag_map, formated_output);
-        cout << formated_output << endl;
+        create_formated_output(output_pattern_str, tag_map, formated_out);
+        cout << formated_out << endl;
     }
     else
     {
         //TODO file option ...
         string opts(argv[1]);
-        string input_pattern_str(argv[2]);
+        input_pattern_str = argv[2];
         string input_str(argv[3]);
         string output_pattern_str(argv[4]);
-
-        map<string, string> tag_map;
-        create_map(input_pattern_str, input_str, tag_map);
-        string formated_output;
-
+ 
         if(opts != "-f")
             return 0;
+
+        // // *BEG-DEBUG!*
+        // //string s1 = input_pattern_str;
+        // input_str = "12. The Rolling Stones-Exile on Main Street-Paint It Black.mp3";
+        map<string, string> tag_map;
+        // create_map(input_pattern_str, input_str, tag_map);
+
+        string formated_out;
+        // create_formated_output(output_pattern_str, tag_map, formated_out);
+        // cout << formated_out << endl;
+        // // *END-DEBUG!*
+
+        // // *BEG-DEBUG!*
+        // //s1 = input_pattern_str;
+        // input_str = "12. The Rolling Stones-Exile on Main Street-Rolling Dice.mp3";
+        // tag_map.clear();
+        // create_map(input_pattern_str, input_str, tag_map);
+
+        // create_formated_output(output_pattern_str, tag_map, formated_out);
+        // cout << formated_out << endl;
+        // // *END-DEBUG!*
+
+        std::ifstream file(input_str);
+        //std::string input_str;
+        while (std::getline(file, input_str))
+        { 
+            
+            tag_map.clear();
+            create_map(input_pattern_str, input_str, tag_map);
+
+            // open file iter
+            formated_out;
+            create_formated_output(output_pattern_str, tag_map, formated_out);
+            cout << formated_out << endl;
+            
+        }
        
-        // open file iter
-        create_formated_output(output_pattern_str, tag_map, formated_output);
-        cout << formated_output << endl;
+       
     }
 
     return 0;
 }
 
-map<string, string>& create_map(string& pattern, const string& s, map<string, string>& map)
+map<string, string>& create_map(const string& pattern, const string& s, map<string, string>& map)
 {
+    // create copy of pattern
+    string pattern_cpy = pattern;
     // create regx from pattern
-    replace_all(pattern, ".", "\\.");
+    replace_all(pattern_cpy, ".", "\\.");
     const string REPLACE_EXP_STR 
-        = "^" + regex_replace(pattern, TAG_EXP, "(" + SPECIAL_CHARS_STR + "*)" ) + "$";
+        = "^" + regex_replace(pattern_cpy, TAG_EXP, "(" + SPECIAL_CHARS_STR + "*)" ) + "$";
     const regex REPLACE_EXP (REPLACE_EXP_STR);
     
     // create smatch
@@ -83,7 +118,7 @@ map<string, string>& create_map(string& pattern, const string& s, map<string, st
     
     // iterate through tag matches and create map
     int idx = 1;
-    auto begin = sregex_iterator(pattern.begin(), pattern.end(), TAG_EXP);
+    auto begin = sregex_iterator(pattern_cpy.begin(), pattern_cpy.end(), TAG_EXP);
     auto end = sregex_iterator();
     
     for (sregex_iterator i = begin; i != end; ++i)
@@ -143,9 +178,15 @@ void replace_all(string& s, const string& sub_str, const string& replace_str)
 
 /*
 USAGE:
-./create_remap "<track>. <artist>-<album>-<title>.<type>" "10. The Rolling Stones-Exile On Main Street-Brown Sugar.mp3" "<track>: <title>.<type"
+./create_remap "<track>. <artist>-<album>-<title>.<type>" "10. The Rolling Stones-Exile On Main Street-Brown Sugar.mp3" "<track>: <title>.<type>"
 ./create_remap "<first> <last>:<phone> <sex>" "Alfred E. Numan:555-555-9696 M" "Sex : <sex>    Name :<last>, <first>    Phone : <phone>"
 ./create_remap "<track>. <artist> - <album> - <title>.<type>"  "10. The Rolling Stones - Exile On Main Street - Brown Sugar.mp3"  "/<artist>/<album>/<track>. <title>.<type>"
+./create_remap "/<artist>/<album>" "/Bob Dylan/Highway 61 Revisited" "<artist>-<album>"
+./create_remap "/<artist>/<album>/<track>. <title>.<type>" "/Bob Dylan/1965 - Highway 61 Revisited/01. Like a Rolling Stone.mp3" "<track>: <artist>-<album>-<title>.<type>"
+
+FILE INPUT:
+./create_remap -f "/<artist>/<album>/<track>. <title>.<type>" "remap_test_cases.txt" "<track>: <artist>-<album>-<title>.<type>"
+./create_remap -f "<track>: <artist>-<album>-<title>.<type>" "remap_test_case_files_to_dirs.txt" "/<artist>/<album>/<track>. <title>.<type>"
 
 mkdir -p "$(./create_remap "<track>. <artist> - <album> - <title>.<type>"  "10. The Rolling Stones - Exile On Main Street - Brown Sugar.mp3"  "./<artist>/<album>/")" 
 touch "$(./create_remap "<track>. <artist> - <album> - <title>.<type>"  "10. The Rolling Stones - Exile On Main Street - Brown Sugar.mp3"  "./<artist>/<album>/<track>. <title>.<type>")"
