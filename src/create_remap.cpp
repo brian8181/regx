@@ -159,10 +159,22 @@ USAGE:
 ./create_remap "/<artist>/<album>" "/Bob Dylan/Highway 61 Revisited" "<artist>-<album>"
 ./create_remap "/<artist>/<album>/<track>. <title>.<type>" "/Bob Dylan/1965 - Highway 61 Revisited/01. Like a Rolling Stone.mp3" "<track>: <artist>-<album>-<title>.<type>"
 
-FILE INPUT:
+-FILE INPUT:
 ./create_remap -f "/<artist>/<album>/<track>. <title>.<type>" "remap_test_cases.txt" "<track>: <artist>-<album>-<title>.<type>"
 ./create_remap -f "<track>: <artist>-<album>-<title>.<type>" "remap_test_case_files_to_dirs.txt" "/<artist>/<album>/<track>. <title>.<type>"
 
+-TEST CREATING COMMANDS
 mkdir -p "$(./create_remap "<track>. <artist> - <album> - <title>.<type>"  "10. The Rolling Stones - Exile On Main Street - Brown Sugar.mp3"  "./<artist>/<album>/")" 
 touch "$(./create_remap "<track>. <artist> - <album> - <title>.<type>"  "10. The Rolling Stones - Exile On Main Street - Brown Sugar.mp3"  "./<artist>/<album>/<track>. <title>.<type>")"
+
+-CREATE COPY COMMAND
+./create_remap -f "/<artist>/<album>/<track>. <title>.<type>" \
+"remap_test_cases.txt" \
+"mkdir -p \"/home/brian/tmp/<artist>/<album>/\" & cp \"/media/brian/TOSHIBA EXT/music/albums/<artist>/<album>/<track>. <title>.<type>\" \"/home/brian/tmp/<artist>/<album>/<track>: <artist>-<album>-<title>.<type>\""\
+> copy.sh
+
+--RUN IT?
+#chmod +x copy.sh
+#./copy.sh
+
 */

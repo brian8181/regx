@@ -7,7 +7,7 @@ using namespace std;
 int main(int argc, char* argv[]) 
 {
     if(argc != 3)
-        return 0;
+        return -1; // args error
 
     string exp(argv[1]);
     string src(argv[2]);
