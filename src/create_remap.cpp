@@ -23,8 +23,8 @@ const regex TAG_EXP(TAG_MATCH_EXP_STR);
 void replace_all(string& s, const string& sub_str, const string& replace_str);
 map<string, string>& create_map(const string& pattern, const string& s, map<string, string>& map);
 string& create_formated_output(const string& s, map<string, string>& map, string& formated_output);
+void print_help();
 
-// TODO: order args
 /*
 
 create_remap [opts] INPUT_PATTERN OUTPUT_PATTERN [INPUT ... ]
@@ -34,43 +34,44 @@ create_remap [opts] INPUT_PATTERN OUTPUT_PATTERN [INPUT ... ]
 int main(int argc, char* argv[]) 
 {
     int opt;
-    bool file_opt = false;
-    bool verbose_opt = false;
+    bool file_flag = false;
+    bool verbose_flag = false;
+    bool help_flag = false;
     while ((opt = getopt(argc, argv, "hvfn:")) != -1) 
     {
         switch (opt) 
         {
         case 'h':
-            printf("Usage: %s [-f] INPUT_PATTERN OUTPUT_PATTERN INPUT\n", argv[0]);
+            print_help();
             return 0;
         case 'v':
-            verbose_opt = true;
+            verbose_flag = true;
             break;
         case 'f':
-            file_opt = true;
+            file_flag = true;
             break;
         default: /* '?' */
-            fprintf(stderr, "Usage: %s [-f] INPUT_PATTERN OUTPUT_PATTERN INPUT\n", argv[0]);
-            exit(EXIT_FAILURE);
+            fprintf(stderr, "Unexpected arguments check, -h for help\n");
+            return EXIT_FAILURE;
         }
     }
 
     if (optind >= argc) 
     {
-        fprintf(stderr, "Expected argument after options\n");
+        fprintf(stderr, "Expected argument after options, -h for help\n");
         exit(EXIT_FAILURE);
     }
 
-    if(verbose_opt)
+    if(verbose_flag)
     {
-        printf("\nUsage: %s [-f] INPUT_PATTERN OUTPUT_PATTERN INPUT\n\n", argv[0]);
+        print_help();
     }
-
+    
     string input_pattern_str(argv[optind]);
     string output_pattern_str(argv[optind+1]);
     string input_str(argv[optind+2]);
 
-    if(!file_opt)
+    if(!file_flag)
     {
         map<string, string> tag_map;
         create_map(input_pattern_str, input_str, tag_map);
@@ -96,7 +97,7 @@ int main(int argc, char* argv[])
             cout << formated_out << endl;
         }
     }
-    return 0;
+    exit(EXIT_SUCCESS);
 }
 
 map<string, string>& create_map(const string& pattern, const string& s, map<string, string>& map)
@@ -172,11 +173,23 @@ void replace_all(string& s, const string& sub_str, const string& replace_str)
     }
 }
 
+void print_help()
+{
+    cout << "\n" 
+        << FMT_BOLD << "create_remap" << FMT_RESET << " "
+        << "[OPTIONS] " 
+        << FMT_UNDERLINE << "INPUT_PATTERN"  << FMT_RESET << " " 
+        << FMT_UNDERLINE << "OUTPUT_PATTERN" << FMT_RESET << " "
+        << FMT_UNDERLINE << "[INPUT ...]"    << FMT_RESET << "\n\n";
+}
+
 /*
 USAGE
-./create_remap -f "<track>: <artist>-<album>-<title>.<type>" "remap_test_case_files_to_dirs.txt" "/<artist>/<album>/<track>. <title>.<type>"
+./create_remap -f "<track>: <artist>-<album>-<title>.<type>" "/<artist>/<album>/<track>. <title>.<type>" "remap_test_case_files_to_dirs.txt"
+./create_remap "<track>. <artist>-<album>-<title>.<type>" "/<artist>/<album>/<track>. <title>.<type>" "$(./create_remap "/<artist>/<album>/<track>. <title>.<type>"  "<track>. <artist>-<album>-<title>.<type>" "/Pink Floyd/The Wall/10. Run Like Hell.mp3")"
 
-OLD USAGE:
+
+OLD USAGE  !!!WRONG ARG ORDER!!:
 ./create_remap "<track>. <artist>-<album>-<title>.<type>" "10. The Rolling Stones-Exile On Main Street-Brown Sugar.mp3" "<track>: <title>.<type>"
 ./create_remap "<first> <last>:<phone> <sex>" "Alfred E. Numan:555-555-9696 M" "Sex : <sex>    Name :<last>, <first>    Phone : <phone>"
 ./create_remap "<track>. <artist> - <album> - <title>.<type>"  "10. The Rolling Stones - Exile On Main Street - Brown Sugar.mp3"  "/<artist>/<album>/<track>. <title>.<type>"
