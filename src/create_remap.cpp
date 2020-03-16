@@ -13,13 +13,16 @@ const string FMT_UNDERLINE = "\e[4m";
 const string FMT_BOLD      = "\e[1m";
 const string FMT_RESET     = "\e[0m";
 
-// sets allowed pattern for tag names
-const string TAG_MATCH_EXP_STR = R"(\<([A-z]+[A-z0-9]*)\>)";
 // regx special chars = ^ $ \ . * + ? ( ) [ ] { } | :
+// ~!@#$%^&*()_+`-=[]\{}|;':",./<>?"
+// ~!@#\\$%\\^&\\*\\(\\)_\\+`-=\\[\\]\\\\\{\\}\\|;':"\\,\\./<>\\?" ESCAPED
+
+// character sets allowed pattern for tag names
+const string TAG_MATCH_EXP_STR = R"(\<([A-z]+[A-z0-9]*)\>)";
 const string SPECIAL_CHARS_STR = R"([A-z0-9 \^\$\.\*\+\:\'\[\]\{\}\|;,@#_-])";
 const regex TAG_EXP(TAG_MATCH_EXP_STR);
 
-// functions
+// declare functions prototypes
 void replace_all(string& s, const string& sub_str, const string& replace_str);
 map<string, string>& create_map(const string& pattern, const string& s, map<string, string>& map);
 string& create_formated_output(const string& s, map<string, string>& map, string& formated_output);
@@ -185,7 +188,7 @@ void print_help()
 
 /*
 USAGE
-./create_remap -f "<track>: <artist>-<album>-<title>.<type>" "/<artist>/<album>/<track>. <title>.<type>" "remap_test_case_files_to_dirs.txt"
+./create_remap -f "<track>: <artist> - <date> - <album> - <title>.<type>" "/<artist>/<date> - <album>/<track>. <title>.<type>" "remap_test_case_file_names.txt"
 ./create_remap "<track>. <artist>-<album>-<title>.<type>" "/<artist>/<album>/<track>. <title>.<type>" "$(./create_remap "/<artist>/<album>/<track>. <title>.<type>"  "<track>. <artist>-<album>-<title>.<type>" "/Pink Floyd/The Wall/10. Run Like Hell.mp3")"
 
 
@@ -213,5 +216,27 @@ touch "$(./create_remap "<track>. <artist> - <album> - <title>.<type>"  "10. The
 --RUN IT?
 #chmod +x copy.sh
 #./copy.sh
+
+//DEMO OUTPUT
+bash>$ cat remap_test_case_file_names.txt
+01: Bob Dylan - 1965 - Highway 61 Revisited - Like a Rolling Stone.mp3
+02: Bob Dylan - 1965 - Highway 61 Revisited - Tombstone Blues.mp3
+03: Bob Dylan - 1965 - Highway 61 Revisited - It Takes a Lot to Laugh, It Takes a Train to Cry.mp3
+04: Bob Dylan - 1965 - Highway 61 Revisited - From a Buick 6.mp3
+05: Bob Dylan - 1965 - Highway 61 Revisited - Ballad of a Thin Man.mp3
+06: Bob Dylan - 1965 - Highway 61 Revisited - Queen Jane Approximately.mp3
+07: Bob Dylan - 1965 - Highway 61 Revisited - Highway 61 Revisited.mp3
+08: Bob Dylan - 1965 - Highway 61 Revisited - Just Like Tom Thumb's Blues.mp3
+09: Bob Dylan - 1965 - Highway 61 Revisited - Desolation Row.mp3
+bash>$ ./create_remap -f "<track>: <artist> - <date> - <album> - <title>.<type>" "/<artist>/<date> - <album>/<track>. <title>.<type>" "remap_test_case_file_names.txt"
+/Bob Dylan/1965 - Highway 61 Revisited/01. Like a Rolling Stone.mp3
+/Bob Dylan/1965 - Highway 61 Revisited/02. Tombstone Blues.mp3
+/Bob Dylan/1965 - Highway 61 Revisited/03. It Takes a Lot to Laugh, It Takes a Train to Cry.mp3
+/Bob Dylan/1965 - Highway 61 Revisited/04. From a Buick 6.mp3
+/Bob Dylan/1965 - Highway 61 Revisited/05. Ballad of a Thin Man.mp3
+/Bob Dylan/1965 - Highway 61 Revisited/06. Queen Jane Approximately.mp3
+/Bob Dylan/1965 - Highway 61 Revisited/07. Highway 61 Revisited.mp3
+/Bob Dylan/1965 - Highway 61 Revisited/08. Just Like Tom Thumb's Blues.mp3
+/Bob Dylan/1965 - Highway 61 Revisited/09. Desolation Row.mp3
 
 */

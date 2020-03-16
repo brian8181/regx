@@ -24,12 +24,12 @@ int main(int argc, char* argv[])
           << FMT_UNDERLINE << "PATTERN" << FMT_RESET << " " 
           << FMT_UNDERLINE << "INPUT"   << FMT_RESET << "\n\n";
 
-    // sets allowed pattern for tag names
-    const string TAG_MATCH_EXP_STR = R"(\<([A-z]+[A-z0-9]*)\>)";
     // regx special chars = ^ $ \ . * + ? ( ) [ ] { } | :
-    
     // ~!@#$%^&*()_+`-=[]\{}|;':",./<>?"
     // ~!@#\\$%\\^&\\*\\(\\)_\\+`-=\\[\\]\\\\\{\\}\\|;':"\\,\\./<>\\?" ESCAPED
+
+    // character sets allowed pattern for tag names
+    const string TAG_MATCH_EXP_STR = R"(\<([A-z]+[A-z0-9]*)\>)";
     const string SPECIAL_CHARS_STR = R"([A-z0-9 \^\$\.\*\+\:\'\[\]\{\}\|;,@#_-])";
 
     // create regx from pattern
