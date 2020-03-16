@@ -3,6 +3,7 @@
 #include <regex>
 #include <map>
 #include <fstream>
+#include <unistd.h>
 
 using namespace std;
 
@@ -32,19 +33,45 @@ create_remap [opts] INPUT_PATTERN OUTPUT_PATTERN [INPUT ... ]
 
 int main(int argc, char* argv[]) 
 {
-     if(argc < 4)
-            return -1; //args error
-
-    string input_pattern_str;
-    string input_str;
-    string output_pattern_str;
-
-    if(0)
+    int opt;
+    bool file_opt = false;
+    bool verbose_opt = false;
+    while ((opt = getopt(argc, argv, "hvfn:")) != -1) 
     {
-        input_pattern_str = argv[1];
-        input_str = argv[2];
-        output_pattern_str = argv[3];
+        switch (opt) 
+        {
+        case 'h':
+            printf("Usage: %s [-f] INPUT_PATTERN OUTPUT_PATTERN INPUT\n", argv[0]);
+            return 0;
+        case 'v':
+            verbose_opt = true;
+            break;
+        case 'f':
+            file_opt = true;
+            break;
+        default: /* '?' */
+            fprintf(stderr, "Usage: %s [-f] INPUT_PATTERN OUTPUT_PATTERN INPUT\n", argv[0]);
+            exit(EXIT_FAILURE);
+        }
+    }
 
+    if (optind >= argc) 
+    {
+        fprintf(stderr, "Expected argument after options\n");
+        exit(EXIT_FAILURE);
+    }
+
+    if(verbose_opt)
+    {
+        printf("\nUsage: %s [-f] INPUT_PATTERN OUTPUT_PATTERN INPUT\n\n", argv[0]);
+    }
+
+    string input_pattern_str(argv[optind]);
+    string output_pattern_str(argv[optind+1]);
+    string input_str(argv[optind+2]);
+
+    if(!file_opt)
+    {
         map<string, string> tag_map;
         create_map(input_pattern_str, input_str, tag_map);
         string formated_out;
@@ -54,14 +81,6 @@ int main(int argc, char* argv[])
     }
     else
     {
-        string opts( argv[1] );
-        input_pattern_str = argv[2];
-        input_str = argv[3];
-        output_pattern_str = argv[4];
- 
-        if(opts != "-f")
-            return -1; //args error
-        
         // iter all lines
         map<string, string> tag_map;
         string formated_out;
@@ -154,7 +173,10 @@ void replace_all(string& s, const string& sub_str, const string& replace_str)
 }
 
 /*
-USAGE:
+USAGE
+./create_remap -f "<track>: <artist>-<album>-<title>.<type>" "remap_test_case_files_to_dirs.txt" "/<artist>/<album>/<track>. <title>.<type>"
+
+OLD USAGE:
 ./create_remap "<track>. <artist>-<album>-<title>.<type>" "10. The Rolling Stones-Exile On Main Street-Brown Sugar.mp3" "<track>: <title>.<type>"
 ./create_remap "<first> <last>:<phone> <sex>" "Alfred E. Numan:555-555-9696 M" "Sex : <sex>    Name :<last>, <first>    Phone : <phone>"
 ./create_remap "<track>. <artist> - <album> - <title>.<type>"  "10. The Rolling Stones - Exile On Main Street - Brown Sugar.mp3"  "/<artist>/<album>/<track>. <title>.<type>"
@@ -163,7 +185,7 @@ USAGE:
 
 -FILE INPUT:
 ./create_remap -f "/<artist>/<album>/<track>. <title>.<type>" "remap_test_cases.txt" "<track>: <artist>-<album>-<title>.<type>"
-./create_remap -f "<track>: <artist>-<album>-<title>.<type>" "remap_test_case_files_to_dirs.txt" "/<artist>/<album>/<track>. <title>.<type>"
+./create_remap -f "<track>: <artist>-<album>-<title>.<type>" "/<artist>/<album>/<track>. <title>.<type>" "remap_test_case_files_to_dirs.txt" 
 
 -TEST CREATING COMMANDS
 mkdir -p "$(./create_remap "<track>. <artist> - <album> - <title>.<type>"  "10. The Rolling Stones - Exile On Main Street - Brown Sugar.mp3"  "./<artist>/<album>/")" 
