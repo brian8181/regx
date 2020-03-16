@@ -6,41 +6,44 @@
 
 using namespace std;
 
-const string FMT_FG_GREEN  = "\e[32m";
+// shell color constants
+const string FMT_FG_GREEN  = "\e[32m"; 
 const string FMT_UNDERLINE = "\e[4m";
 const string FMT_BOLD      = "\e[1m";
 const string FMT_RESET     = "\e[0m";
+
 // sets allowed pattern for tag names
 const string TAG_MATCH_EXP_STR = R"(\<([A-z]+[A-z0-9]*)\>)";
 // regx special chars = ^ $ \ . * + ? ( ) [ ] { } | :
 const string SPECIAL_CHARS_STR = R"([A-z0-9 \^\$\.\*\+\:\'\[\]\{\}\|;,@#_-])";
 const regex TAG_EXP(TAG_MATCH_EXP_STR);
 
+// functions
 void replace_all(string& s, const string& sub_str, const string& replace_str);
 map<string, string>& create_map(const string& pattern, const string& s, map<string, string>& map);
-//map<string, string>& create_map(const string& pattern, const string& s, map<string, string>& map);
 string& create_formated_output(const string& s, map<string, string>& map, string& formated_output);
+
+// TODO: order args
+/*
+
+create_remap [opts] INPUT_PATTERN OUTPUT_PATTERN [INPUT ... ]
+
+*/
 
 int main(int argc, char* argv[]) 
 {
      if(argc < 4)
             return -1; //args error
 
-    // if(0)
-    // {
-    //     cout << "\n" << FMT_BOLD << "create_remap" << FMT_RESET << " " 
-    //         << FMT_UNDERLINE << "INPUT_FORMAT" << FMT_RESET << " "
-    //         << FMT_UNDERLINE << "INPUT" << FMT_RESET << " "  
-    //         << FMT_UNDERLINE << "OUTPUT_FORMAT" << FMT_RESET << "\n\n";
-    // }
-
     string input_pattern_str;
+    string input_str;
+    string output_pattern_str;
 
     if(argc < 5)
     {
         input_pattern_str = argv[1];
-        string input_str(argv[2]);
-        string output_pattern_str(argv[3]);
+        input_str = argv[2];
+        output_pattern_str = argv[3];
 
         map<string, string> tag_map;
         create_map(input_pattern_str, input_str, tag_map);
@@ -51,10 +54,10 @@ int main(int argc, char* argv[])
     }
     else
     {
-        string opts(argv[1]);
+        string opts( argv[1] );
         input_pattern_str = argv[2];
-        string input_str(argv[3]);
-        string output_pattern_str(argv[4]);
+        input_str = argv[3];
+        output_pattern_str = argv[4];
  
         if(opts != "-f")
             return -1; //args error
@@ -109,8 +112,7 @@ string& create_formated_output(const string& s, map<string, string>& map, string
 {
     auto begin = sregex_iterator(s.begin(), s.end(), TAG_EXP);
     auto end = sregex_iterator();
-    formated_output = s;
-   
+    formated_output = s; // copy s
     int format_str_pos = 0;
     int format_str_end = 0;
     int output_str_pos = 0;

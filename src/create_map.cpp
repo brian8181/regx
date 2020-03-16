@@ -27,6 +27,9 @@ int main(int argc, char* argv[])
     // sets allowed pattern for tag names
     const string TAG_MATCH_EXP_STR = R"(\<([A-z]+[A-z0-9]*)\>)";
     // regx special chars = ^ $ \ . * + ? ( ) [ ] { } | :
+    
+    // ~!@#$%^&*()_+`-=[]\{}|;':",./<>?"
+    // ~!@#\\$%\\^&\\*\\(\\)_\\+`-=\\[\\]\\\\\{\\}\\|;':"\\,\\./<>\\?" ESCAPED
     const string SPECIAL_CHARS_STR = R"([A-z0-9 \^\$\.\*\+\:\'\[\]\{\}\|;,@#_-])";
 
     // create regx from pattern
@@ -77,6 +80,35 @@ void replace_all(string& s, const string& sub_str, const string& replace_str)
 USAGE:
 ./create_map "<track>. <artist>-<album>-<title>.<type>" "10. The Rolling Stones-Exile On Main Street-Brown Sugar.mp3"
 ./create_map "<test>" "ABCDEFGHIJKLMPNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+_-*^|:[]{}'"
+./create_map "<a> <b>.<c>:<d>_<e>-<f>@<g>%<h>=<j>\\^<k>" "A B.C:D_E-F@G%H=J^K"
+
+./create_map "<a> <b>.<c>:<d>_<e>-<f>@<g>%<h>=<j>\\^<k>\\\!<l>" "A B.C:D_E-F@G%H=J^K\\!L"
+./create_map "<a> <b>.<c>:<d>_<e>-<f>@<g>%<h>=<j>\\^<k>\\\!<l>\\+<m>" "A B.C:D_E-F@G%H=J^K\\!L+M"
+./create_map "<a> <b>.<c>:<d>_<e>-<f>@<g>%<h>=<j>\\^<k>\\\!<l>\\+<m>\\=<n>" "A B.C:D_E-F@G%H=J^K\\!L+M=N"
+./create_map "<a> <b>.<c>:<d>_<e>-<f>@<g>%<h>=<j>\\^<k>\\\!<l>\\+<m>\\=<n>\\(<o>\\)" "A B.C:D_E-F@G%H=J^K\\!L+M=N(O)"
+./create_map "<a> <b>.<c>:<d>_<e>-<f>@<g>%<h>=<j>\\^<k>\\\!<l>\\+<m>\\=<n>\\(<o>\\)\\[<p>\\]\\{<q>\\}" "A B.C:D_E-F@G%H=J^K\\!L+M=N(O)[P]{Q}"
+./create_map "<a> <b>.<c>:<d>_<e>-<f>@<g>%<h>=<j>\\^<k>\\\!<l>\\+<m>\\=<n>\\(<o>\\)\\[<p>\\]\\{<q>\\}\\|<r>" "A B.C:D_E-F@G%H=J^K\\!L+M=N(O)[P]{Q}|R"
+./create_map "<a> <b>.<c>:<d>_<e>-<f>@<g>%<h>=<j>\\^<k>\\\!<l>\\+<m>\\=<n>\\(<o>\\)\\[<p>\\]\\{<q>\\}\\|<r>\\\\<s>" "A B.C:D_E-F@G%H=J^K\\!L+M=N(O)[P]{Q}|R\\S"
+./create_map "<a> <b>.<c>:<d>_<e>-<f>@<g>%<h>=<j>\\^<k>\\\!<l>\\+<m>\\=<n>\\(<o>\\)\\[<p>\\]\\{<q>\\}\\|<r>\\\\<s>~<t>\\:<u>;<v>" "A B.C:D_E-F@G%H=J^K\\!L+M=N(O)[P]{Q}|R\\S~T:U;V"
+./create_map "<a> <b>.<c>:<d>_<e>-<f>@<g>%<h>=<j>\\^<k>\\\!<l>\\+<m>\\=<n>\\(<o>\\)\\[<p>\\]\\{<q>\\}\\|<r>\\\\<s>~<t>\\:<u>;<v>\\\"<w>" "A B.C:D_E-F@G%H=J^K\\!L+M=N(O)[P]{Q}|R\\S~T:U;V\"W"
+./create_map "<a> <b>.<c>:<d>_<e>-<f>@<g>%<h>=<j>\\^<k>\\\!<l>\\+<m>\\=<n>\\(<o>\\)\\[<p>\\]\\{<q>\\}\\|<r>\\\\<s>~<t>\\:<u>;<v>\\\"<w>\\\'<x>" "A B.C:D_E-F@G%H=J^K\\!L+M=N(O)[P]{Q}|R\\S~T:U;V\"W\\'X"
+./create_map "<a> <b>.<c>:<d>_<e>-<f>@<g>%<h>=<j>\\^<k>\\\!<l>\\+<m>\\=<n>\\(<o>\\)\\[<p>\\]\\{<q>\\}\\|<r>\\\\<s>~<t>\\:<u>;<v>\\\"<w>\\\'<x>\\,<y>" "A B.C:D_E-F@G%H=J^K\\!L+M=N(O)[P]{Q}|R\\S~T:U;V\"W\\'X,Y"
+./create_map "<a> <b>.<c>:<d>_<e>-<f>@<g>%<h>=<j>\\^<k>\\\!<l>\\+<m>\\=<n>\\(<o>\\)\\[<p>\\]\\{<q>\\}\\|<r>\\\\<s>~<t>\\:<u>;<v>\\\"<w>\\\'<x>\\,<y>\\?Z" "A B.C:D_E-F@G%H=J^K\\!L+M=N(O)[P]{Q}|R\\S~T:U;V\"W\\'X,Y?Z"
+
+# holding on chars [<>`!]
+
+./create_map '<a>\\!<b>' 'A\!B'
+./create_map "<a>\\^<j>" "A^J"
+
 ISSUES:
+./create_map "<a> <b>.<c>:<d>_<e>-<f>*<g>" "A B.C:D_E-F*G"
 ./create_map "<first> <last>:<phone> <sex>" "Alfred E. Numan:555-555-9696 M" "Sex : <sex>    Name :<last>, <first>    Phone : <phone>"
+
+./create_map "<a>*<b>" "A*B"
+./create_map "<a>+<b>" "A+B"
+./create_map "<a>^<j>" "A^J"
+
+
+
+
 */

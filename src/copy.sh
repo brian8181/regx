@@ -1,3 +1,4 @@
+#!/bin/sh -v
 mkdir -p "/home/brian/tmp/Bob Dylan/1965 - Highway 61 Revisited/" & cp "/media/brian/TOSHIBA EXT/music/albums/Bob Dylan/1965 - Highway 61 Revisited/01. Like a Rolling Stone.mp3" "/home/brian/tmp/Bob Dylan/1965 - Highway 61 Revisited/01: Bob Dylan-1965 - Highway 61 Revisited-Like a Rolling Stone.mp3"
 mkdir -p "/home/brian/tmp/Bob Dylan/1965 - Highway 61 Revisited/" & cp "/media/brian/TOSHIBA EXT/music/albums/Bob Dylan/1965 - Highway 61 Revisited/02. Tombstone Blues.mp3" "/home/brian/tmp/Bob Dylan/1965 - Highway 61 Revisited/02: Bob Dylan-1965 - Highway 61 Revisited-Tombstone Blues.mp3"
 mkdir -p "/home/brian/tmp/Bob Dylan/1965 - Highway 61 Revisited/" & cp "/media/brian/TOSHIBA EXT/music/albums/Bob Dylan/1965 - Highway 61 Revisited/03. It Takes a Lot to Laugh, It Takes a Train to Cry.mp3" "/home/brian/tmp/Bob Dylan/1965 - Highway 61 Revisited/03: Bob Dylan-1965 - Highway 61 Revisited-It Takes a Lot to Laugh, It Takes a Train to Cry.mp3"
