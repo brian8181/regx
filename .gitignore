@@ -1,5 +1,5 @@
 regx.d
-obj/regx.o
+*.o
 myapp
 src/match_tags
 src/match_group
@@ -16,7 +16,8 @@ src/regx_c
 src/regx_ex2_c
 regx_test
 src/create_remap
-src/10. The Rolling Stones-Exile On Main Street-Brown Sugar.mp3
 src/sregx
 src/ls_files
 src/unit_test
+build/*
+build/regx
